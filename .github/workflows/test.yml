@@ -43,6 +43,7 @@ jobs:
       - name: Verify
         run: | 
           pwd
+          ls -R
           cd $(pwd)/source/examples/verovio
           pwd
           ls -R
