@@ -50,16 +50,15 @@ jobs:
 
       - name: Verify
         run: | 
-          pwd
-          ls -R
           cd ${{ env.MUSIC-ENCODING_DIR }}/source/examples/verovio
           pwd
           ls -R
 
       - name: Build with Ant
         # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/source/examples
         run: |
-          docker run --rm -v ${{ env.MUSIC-ENCODING_DIR }}/source/examples/verovio:/data edirom/staticverovioconverter:latest
+          docker run --rm -v  verovio:/data edirom/staticverovioconverter:latest
      
      
       - name: Verify
