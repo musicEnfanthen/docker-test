@@ -13,13 +13,10 @@ env:
   SCHEMA_REPO: ${{ github.repository_owner }}/schema
   SCHEMA_BRANCH: main
 
-  # guidelines
-  GUIDELINES_REPO: ${{ github.repository_owner }}/guidelines
-  GUIDELINES_BRANCH: main
-
-  # temporary directories
-  SCHEMA_DIR: schema-dir
-  GUIDELINES_DIR: guidelines-dir
+  # test
+  MUSIC-ENCODING_REPO : music-encoding/music-encoding
+  MUSIC-ENCODING_BRANCH: develop
+  MUSIC-ENCODING_DIR: test-dir
 
 jobs:
   build:
@@ -40,21 +37,33 @@ jobs:
           # Default: false
           submodules: recursive
 
+
+      - name: Checkout GUIDELINES_REPO into GUIDELINES_DIR
+        uses: actions/checkout@v2
+        with:
+          # repository to check out
+          repository: ${{ env.MUSIC-ENCODING_REPO }}
+          # ref (branch, tag or SHA) to check out
+          ref: ${{ env.MUSIC-ENCODING_BRANCH }}
+          # relative path under $GITHUB_WORKSPACE to place the repository
+          path: ${{ env.MUSIC-ENCODING_DIR }}
+
       - name: Verify
         run: | 
           pwd
           ls -R
-          cd $(pwd)/source/examples/verovio
+          cd ${{ env.MUSIC-ENCODING_DIR }}/source/examples/verovio
           pwd
           ls -R
 
       - name: Build with Ant
         # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
         run: |
-          docker run --rm -v $(pwd)/source/examples/verovio:/data edirom/staticverovioconverter:latest
+          docker run --rm -v ${{ env.MUSIC-ENCODING_DIR }}/source/examples/verovio:/data edirom/staticverovioconverter:latest
      
      
       - name: Verify
         run: |
+          cd ${{ env.MUSIC-ENCODING_DIR }}/source/examples/verovio
           pwd
-          ls
+          ls -R
