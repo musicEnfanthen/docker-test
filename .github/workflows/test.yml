@@ -40,10 +40,12 @@ jobs:
           # Default: false
           submodules: recursive
 
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
+      - name: Verify
+        run: | 
+          pwd
+          cd $(pwd)/source/examples/verovio
+          pwd
+          ls -R
 
       - name: Build with Ant
         # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
@@ -52,4 +54,6 @@ jobs:
      
      
       - name: Verify
-        run: ls
+        run: |
+          pwd
+          ls
