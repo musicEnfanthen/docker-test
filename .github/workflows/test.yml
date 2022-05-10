@@ -37,6 +37,9 @@ jobs:
           ref: ${{ env.MUSIC-ENCODING_BRANCH }}
           # relative path under $GITHUB_WORKSPACE to place the repository
           path: ${{ env.MUSIC-ENCODING_DIR }}
+          # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
+          # recursively checkout submodules.
+          submodules: recursive
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
