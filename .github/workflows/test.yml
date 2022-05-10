@@ -52,5 +52,4 @@ jobs:
      
      
       - name: Verify
-        working-directory: source/examples/verovio
         run: ls -R
