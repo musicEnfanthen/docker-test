@@ -45,6 +45,7 @@ jobs:
 
       - name: Build with Ant
         # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+        working-directory: ${{ env.MUSIC-ENCODING_DIR }}
         run: |
           ant -noinput -buildfile build.xml init
           ant -noinput -buildfile build.xml -lib lib/saxon/saxon-he-10.5.jar -Dgithub.sha=${{ github.sha }}
