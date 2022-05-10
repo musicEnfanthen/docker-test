@@ -52,4 +52,4 @@ jobs:
      
      
       - name: Verify
-        run: ls -R
+        run: ls
