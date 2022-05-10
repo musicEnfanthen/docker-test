@@ -71,11 +71,14 @@ jobs:
           cd ${{ env.MUSIC-ENCODING_DIR }}/dist/guidelines/dev/images/generatedLiveExamples
           pwd
           ls -R
+   
+      - name: Verify
+        run: |
+          cd ${{ env.MUSIC-ENCODING_DIR }}/dist/guidelines/dev/
+          pwd
+          ls -R
 
       - name: Generate complete PDF with PrinceXML 
         # For more information see: https://www.princexml.com/
         working-directory: ${{ env.MUSIC-ENCODING_DIR }}
-        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/dist/guidelines/dev/MEI_Guidelines_*.html -o /out/exampleGuidelines.pdf --log /out/princeLog.txt -v
-
-
-
+        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/dist/guidelines/dev/MEI_Guidelines_*.html -o /out/exampleGuidelines.pdf --log /out/princeLog.txt
