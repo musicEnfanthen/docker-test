@@ -42,6 +42,12 @@ jobs:
           # recursively checkout submodules.
           submodules: recursive
 
+      - name: Verify
+        run: | 
+          cd ${{ env.MUSIC-ENCODING_DIR }}
+          pwd
+          ls -R
+
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
