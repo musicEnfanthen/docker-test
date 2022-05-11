@@ -17,6 +17,7 @@ env:
   MUSIC-ENCODING_REPO : music-encoding/music-encoding
   MUSIC-ENCODING_BRANCH: pdf-guidelines
   MUSIC-ENCODING_DIR: test-dir
+  VERSION: v5.0.0-dev
 
 jobs:
   build:
@@ -80,5 +81,12 @@ jobs:
 
       - name: Generate complete PDF with PrinceXML 
         # For more information see: https://www.princexml.com/
-        working-directory: ${{ env.MUSIC-ENCODING_DIR }}
-        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/dist/guidelines/dev/MEI_Guidelines_*.html -o /out/exampleGuidelines.pdf --log /out/princeLog.txt
+        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/dist/guidelines/dev
+        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/MEI_Guidelines_${{ env.VERSION }}_${{ github.sha }}.html -o /out/exampleGuidelines.pdf --log /out/princeLog.txt -v
+        
+      - name: Verify
+        run: |
+          cd ${{ env.MUSIC-ENCODING_DIR }}/dist/guidelines/dev/
+          pwd
+          ls -R
+        
