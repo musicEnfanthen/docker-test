@@ -27,10 +27,10 @@ jobs:
     steps:
       ### BUIDLING THE SCHEMA AND THE GUIDELINES ###
       - name: Checkout main repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Checkout MUSIC-ENCODING_REPO into MUSIC-ENCODING_DIR
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # repository to check out
           repository: ${{ env.MUSIC-ENCODING_REPO }}
@@ -99,4 +99,7 @@ jobs:
       # Upload artifacts
       - uses: actions/upload-artifact@v2
         with:
-          path: ${{ env.MUSIC-ENCODING_DIR }}/build/*.pdf
+          path: | 
+            ${{ env.MUSIC-ENCODING_DIR }}/build/*.pdf
+            ${{ env.MUSIC-ENCODING_DIR }}/build/*.html
+            
