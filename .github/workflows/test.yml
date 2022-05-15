@@ -62,20 +62,20 @@ jobs:
 
       - name: Verify
         run: | 
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/generatedLiveExamples
+          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/
           pwd
           ls -R
 
       - name: Render live MEI image samples to SVG
         # For more information see: https://github.com/Edirom/staticVerovioConverter
         # MEI files are taken from and SVGs are placed into folder: /source/examples/verovio
-        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/build/images/generatedLiveExamples
+        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/build/images/generated
         run: |
           docker run --rm -v $(pwd):/data edirom/staticverovioconverter:latest
    
       - name: Verify
         run: |
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/generatedLiveExamples
+          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/
           pwd
           ls -R
    
