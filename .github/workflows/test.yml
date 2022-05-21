@@ -7,15 +7,15 @@ name: Deploy Schema and Guidelines
 
 on:
   workflow_dispatch: # trigger manually
-  inputs:
-        fork:
-          description: "Fork to use"
-          required: true
-          default: "music-encoding"
-        branch:
-          description: "Branch to use"
-          required: true
-          default: "pdf-guidelines"
+    inputs:
+      fork:
+        description: "Fork to use"
+        required: true
+        default: "music-encoding"
+      branch:
+        description: "Branch to use"
+        required: true
+        default: "pdf-guidelines"
 
 env:
   # schema
