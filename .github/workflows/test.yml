@@ -7,6 +7,15 @@ name: Deploy Schema and Guidelines
 
 on:
   workflow_dispatch: # trigger manually
+  inputs:
+        fork:
+          description: "Fork to use"
+          required: true
+          default: "music-encoding"
+        branch:
+          description: "Branch to use"
+          required: true
+          default: "pdf-guidelines"
 
 env:
   # schema
@@ -14,10 +23,10 @@ env:
   SCHEMA_BRANCH: main
 
   # test
-  MUSIC-ENCODING_REPO : music-encoding/music-encoding
-  MUSIC-ENCODING_BRANCH: pdf-guidelines
-  MUSIC-ENCODING_DIR: test-dir
-  VERSION: v5.0.0-dev
+  BUILD_REPO : ""
+  BUILD_BRANCH: ""
+  BUILD_DIR: test-dir
+  BUILD_VERSION: v5.0.0-dev
 
 jobs:
   build:
@@ -28,23 +37,31 @@ jobs:
       ### BUIDLING THE SCHEMA AND THE GUIDELINES ###
       - name: Checkout main repo
         uses: actions/checkout@v3
+        
+      - name: Get inputs
+        run: |
+          fork=${{ github.event.inputs.fork }}
+          branch=${{ github.event.inputs.branch }}
+          
+          echo BUILD_REPO=$fork/music-encoding >> $GITHUB_ENV
+          echo BUILD_BRANCH=$branch >> $GITHUB_ENV
 
-      - name: Checkout MUSIC-ENCODING_REPO into MUSIC-ENCODING_DIR
+      - name: Checkout BUILD_REPO into BUILD_DIR
         uses: actions/checkout@v3
         with:
           # repository to check out
-          repository: ${{ env.MUSIC-ENCODING_REPO }}
+          repository: ${{ env.BUILD_REPO }}
           # ref (branch, tag or SHA) to check out
-          ref: ${{ env.MUSIC-ENCODING_BRANCH }}
+          ref: ${{ env.BUILD_BRANCH }}
           # relative path under $GITHUB_WORKSPACE to place the repository
-          path: ${{ env.MUSIC-ENCODING_DIR }}
+          path: ${{ env.BUILD_DIR }}
           # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
           # recursively checkout submodules.
           submodules: recursive
 
       - name: Verify
         run: | 
-          cd ${{ env.MUSIC-ENCODING_DIR }}
+          cd ${{ env.BUILD_DIR }}
           pwd
           ls -R
 
@@ -55,44 +72,44 @@ jobs:
 
       - name: Build with Ant
         # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
-        working-directory: ${{ env.MUSIC-ENCODING_DIR }}
+        working-directory: ${{ env.BUILD_DIR }}
         run: |
           ant -noinput -buildfile build.xml init
           ant -noinput -buildfile build.xml -lib lib/saxon/saxon-he-10.5.jar -Dgithub.sha=${{ github.sha }}
 
       - name: Verify
         run: | 
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/
+          cd ${{ env.BUILD_DIR }}/build/images/
           pwd
           ls -R
 
       - name: Render live MEI image samples to SVG
         # For more information see: https://github.com/Edirom/staticVerovioConverter
         # MEI files are taken from and SVGs are placed into folder: /source/examples/verovio
-        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/build/images/
+        working-directory: ${{ env.BUILD_DIR }}/build/images/
         run: |
           docker run --rm -v $(pwd):/data edirom/staticverovioconverter:latest
    
       - name: Verify
         run: |
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/images/
+          cd ${{ env.BUILD_DIR }}/build/images/
           pwd
           ls -R
    
       - name: Verify
         run: |
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/
+          cd ${{ env.BUILD_DIR }}/build/
           pwd
           ls -R
 
       - name: Generate complete PDF with PrinceXML 
         # For more information see: https://www.princexml.com/
-        working-directory: ${{ env.MUSIC-ENCODING_DIR }}/
+        working-directory: ${{ env.BUILD_DIR }}/
         run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.VERSION }}.html --log /out/build/princeLog.txt -v
         
       - name: Verify
         run: |
-          cd ${{ env.MUSIC-ENCODING_DIR }}/build/
+          cd ${{ env.BUILD_DIR }}/build/
           pwd
           ls -R
         
@@ -100,6 +117,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           path: | 
-            ${{ env.MUSIC-ENCODING_DIR }}/build/*.pdf
-            ${{ env.MUSIC-ENCODING_DIR }}/build/*.html
+            ${{ env.BUILD_DIR }}/build/*.pdf
+            ${{ env.BUILD_DIR }}/build/*.html
             
