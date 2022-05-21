@@ -9,7 +9,7 @@ on:
   workflow_dispatch: # trigger manually
     inputs:
       fork:
-        description: "Fork to use"
+        description: "music-encoding fork to use"
         required: true
         default: "music-encoding"
       branch:
