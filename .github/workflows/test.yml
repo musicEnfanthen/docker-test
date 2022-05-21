@@ -105,7 +105,7 @@ jobs:
       - name: Generate complete PDF with PrinceXML 
         # For more information see: https://www.princexml.com/
         working-directory: ${{ env.BUILD_DIR }}/
-        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.VERSION }}.html --log /out/build/princeLog.txt -v
+        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.BUILD_VERSION }}.html --log /out/build/princeLog.txt -v
         
       - name: Verify
         run: |
