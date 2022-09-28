@@ -75,7 +75,7 @@ jobs:
         uses: mavrosxristoforos/get-xml-info@1.1.0
         with:
           xml-file: '${{ env.BUILD_DIR }}/source/modules/MEI.shared.xml'
-          xpath: "//*[local-name() = 'classSpec'][@ident = 'att.meiVersion']//*[local-name() = 'defaultVal']/text()"
+          xpath: "//*[local-name() = 'classSpec'][@ident = 'att.meiVersion']//*[local-name() = 'defaultVal']"
 
       - name: Verify version
         run: |
