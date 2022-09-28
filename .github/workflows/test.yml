@@ -107,11 +107,18 @@ jobs:
         working-directory: ${{ env.BUILD_DIR }}/
         run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.BUILD_VERSION }}.html --log /out/build/princeLog.txt -v
         
-      - name: Verify
+      - name: Verify build directory
         run: |
           cd ${{ env.BUILD_DIR }}/build/
           pwd
           ls -R
+        
+      - name: Verify dist directory
+        run: |
+          cd ${{ env.BUILD_DIR }}/dist/
+          pwd
+          ls -R
+        
         
       # Upload artifacts
       - uses: actions/upload-artifact@v2
