@@ -64,6 +64,12 @@ jobs:
           cd ${{ env.BUILD_DIR }}
           pwd
           ls -R
+      
+      - name: Get XML Info
+        uses: mavrosxristoforos/get-xml-info@1.1.0
+        with:
+          xml-file: 'source/modules/MEI.shared.xml'
+          xpath: "//*[local-name() = 'classSpec'][@ident = 'att.coordinated']//*[local-name() = 'defaultVal']"
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
@@ -75,7 +81,7 @@ jobs:
         working-directory: ${{ env.BUILD_DIR }}
         run: |
           ant -noinput -buildfile build.xml init
-          ant -noinput -buildfile build.xml -lib lib/saxon/saxon-he-10.5.jar -Dgithub.sha=${{ github.sha }}
+          ant -noinput -buildfile build.xml -lib lib/saxon/saxon-he-10.5.jar -Dgithub.sha=${{ github.sha }} -Dversion=${{ steps.getxml.outputs.info }}
 
       - name: Verify
         run: | 
@@ -107,24 +113,16 @@ jobs:
         working-directory: ${{ env.BUILD_DIR }}/
         run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.BUILD_VERSION }}.html --log /out/build/princeLog.txt -v
         
-      - name: Verify build directory
+      - name: Verify
         run: |
           cd ${{ env.BUILD_DIR }}/build/
           pwd
           ls -R
         
-      - name: Verify dist directory
-        run: |
-          cd ${{ env.BUILD_DIR }}/dist/
-          pwd
-          ls -R
-        
-        
       # Upload artifacts
       - uses: actions/upload-artifact@v2
         with:
           path: | 
-            ${{ env.BUILD_DIR }}/dist/guidelines/dev/*
             ${{ env.BUILD_DIR }}/build/*.pdf
             ${{ env.BUILD_DIR }}/build/*.html
             
