@@ -105,7 +105,7 @@ jobs:
       - name: Generate complete PDF with PrinceXML 
         # For more information see: https://www.princexml.com/
         working-directory: ${{ env.BUILD_DIR }}/
-        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/assets/MEI_Guidelines_${{ env.BUILD_VERSION }}.html --log /out/build/assets/princeLog.txt -v
+        run: docker run --rm -v $(pwd):/out yeslogic/prince:14.2 /out/build/MEI_Guidelines_${{ env.BUILD_VERSION }}.html --log /out/build/princeLog.txt -v
         
       - name: Verify
         run: |
@@ -117,6 +117,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           path: | 
-            ${{ env.BUILD_DIR }}/build/assets/*.pdf
-            ${{ env.BUILD_DIR }}/build/assets/*.html
+            ${{ env.BUILD_DIR }}/build/*.pdf
+            ${{ env.BUILD_DIR }}/build/*.html
             
