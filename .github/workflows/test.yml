@@ -135,7 +135,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           path: | 
-            ${{ env.BUILD_DIR }}/dist/guidelines/dev/*
+            ${{ env.BUILD_DIR }}/dist
             ${{ env.BUILD_DIR }}/build/*.pdf
             ${{ env.BUILD_DIR }}/build/*.html
             
