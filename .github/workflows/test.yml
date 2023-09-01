@@ -15,7 +15,7 @@ on:
       - 'develop'
       - 'release/**'
     tags:
-      - "v*"
+      - 'v*'
 
 env:
   REPO_OWNER: musicEnfanthen
@@ -82,7 +82,6 @@ jobs:
           name: prince_log
           path: ${{ github.workspace }}/build/prince.log
 
-
       ### SET TARGET_DIR environment variable for dev version
       - name: Set TARGET_DIR for dev
         if: github.repository_owner == env.REPO_OWNER && github.ref == 'refs/heads/develop'
@@ -111,7 +110,7 @@ jobs:
 
       ### PUBLISHING THE SCHEMA ###
       - name: Checkout SCHEMA_REPO into SCHEMA_DIR
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         uses: actions/checkout@v3
         with:
           # repository to check out
@@ -129,7 +128,7 @@ jobs:
         run: echo "SCHEMA_DIR=${{ env.SCHEMA_DIR }}/${{env.TARGET_DIR}}"
 
       - name: Copy built schema to SCHEMA_DIR
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         run: |
           rm -r $SCHEMA_DIR/${{ env.TARGET_DIR }}
           cp -r dist/schemata/ $SCHEMA_DIR/
@@ -137,14 +136,14 @@ jobs:
           cp -r build/mei-source_canonicalized.xml $SCHEMA_DIR/${{ env.TARGET_DIR }}
 
       - name: Check git status before commit
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.SCHEMA_DIR }}
         run: |
           git config --get remote.origin.url
           git status
 
       - name: Configure git
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.SCHEMA_DIR }}
         run: |
           echo "Configuring git..."
@@ -152,7 +151,7 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
 
       - name: Commit files
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.SCHEMA_DIR }}
         run: |
           echo "Running git commit..."
@@ -160,13 +159,13 @@ jobs:
           git commit -m "Auto-commit of schema build for ${{ github.repository }}@${{ github.sha }}"
 
       - name: Push changes to SCHEMA
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.SCHEMA_DIR }}
         run: git push origin HEAD:$SCHEMA_BRANCH
 
       ### PUBLISHING THE GUIDELINES ###
       - name: Checkout GUIDELINES_REPO into GUIDELINES_DIR
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         uses: actions/checkout@v3
         with:
           # repository to check out
@@ -184,25 +183,25 @@ jobs:
         run: echo "GUIDELINES_DIR=${{ env.GUIDELINES_DIR }}/${{env.TARGET_DIR}}"
 
       - name: Copy built web guidelines to GUIDELINES_DIR
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         run: |
           rm -rf $GUIDELINES_DIR/${{ env.TARGET_DIR }}
           cp -r dist/guidelines/web $GUIDELINES_DIR/
           mv $GUIDELINES_DIR/web $GUIDELINES_DIR/${{ env.TARGET_DIR }}
 
       - name: Copy built PDF guidelines to GUIDELINES_DIR, if release is being created
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && (github.event.base_ref == 'stable') }}
+        if: github.repository_owner == env.REPO_OWNER && (github.event.base_ref == 'stable')
         run: find ${{ github.workspace }}/dist/guidelines/pdf -name 'MEI_Guidelines_*.pdf' -exec cp {} $GUIDELINES_DIR/${{ env.TARGET_DIR }}/ \;
 
       - name: Check git status before commit
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.GUIDELINES_DIR }}
         run: |
           git config --get remote.origin.url
           git status
 
       - name: Configure git
-        if: ${{ github.repository_owner == env.REPO_OWNER }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.GUIDELINES_DIR }}
         run: |
           echo "Configuring git..."
@@ -210,7 +209,7 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
 
       - name: Commit files
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.GUIDELINES_DIR }}
         run: |
           echo "Running git commit..."
@@ -218,7 +217,7 @@ jobs:
           git commit -m "Auto-commit of guidelines build for ${{ github.repository }}@${{ github.sha }}"
 
       - name: Push changes to GUIDELINES
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && ((github.event.base_ref == 'develop')  || (github.event.base_ref == 'stable')) }}
+        if: github.repository_owner == env.REPO_OWNER
         working-directory: ${{ env.GUIDELINES_DIR }}
         run: git push origin HEAD:$GUIDELINES_BRANCH
 
@@ -226,7 +225,7 @@ jobs:
       # could be remodelled to automaticall create the tag, too
       # but then the version would have to be determined programatically
       - name: Create release
-        if: ${{ (github.ref_type == 'tag') && (github.event.base_ref == 'stable') }}
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # ratchet:ncipollo/release-action@v1.13.0
         with:
           allowUpdates: false
