@@ -55,7 +55,7 @@ jobs:
 
       ### Exit if refis not on develop or tag
       - name: Exit if not on develop or tag
-        if: github.ref != 'refs/heads/develop' || !startsWith(github.ref, 'refs/tags/v*')
+        if: github.ref != 'refs/heads/develop' || !startsWith(github.ref, 'refs/tags/')
         run: exit -1
 
       ### BUIDLING THE SCHEMA AND THE GUIDELINES ###
@@ -94,7 +94,7 @@ jobs:
 
       ### SET TARGET_DIR environment variable for tagged release
       - name: Set TARGET_DIR for tagged release
-        if: github.repository_owner == env.REPO_OWNER  && startsWith(github.ref, 'refs/tags/v')
+        if: github.repository_owner == env.REPO_OWNER  && startsWith(github.ref, 'refs/tags/')
         run: echo "TARGET_DIR=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Get tag version
