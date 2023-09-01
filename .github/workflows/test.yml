@@ -30,7 +30,7 @@ env:
   # temporary directories
   SCHEMA_DIR: schema-dir
   GUIDELINES_DIR: guidelines-dir
-  TARGET_DIR: dev # will be set dynamically for a release tag in steps below
+  TARGET_DIR: '' # will be set dynamically for a release tag in steps below
 
   # TARGET_DIR variable will be set dynamically in steps below
 
@@ -95,12 +95,7 @@ jobs:
       - name: Check TARGET_DIR
         run: echo "TARGET_DIR=$TARGET_DIR"
 
-      - name: Get tag version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-
-      - name: Check tag version
-        run: echo "VERSION=${{ steps.get_version.outputs.VERSION }}"
+     
 
       ### Exit if ref is not on develop or tag
       - name: Exit if not on develop or tag
@@ -231,6 +226,14 @@ jobs:
       #   if: github.repository_owner == env.REPO_OWNER
       #   working-directory: ${{ env.GUIDELINES_DIR }}
       #   run: git push origin HEAD:$GUIDELINES_BRANCH
+
+
+      - name: Get tag version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Check tag version
+        run: echo "VERSION=${{ steps.get_version.outputs.VERSION }}"
 
       # Whenever a tag is being created a released is being issued
       # could be remodelled to automaticall create the tag, too
