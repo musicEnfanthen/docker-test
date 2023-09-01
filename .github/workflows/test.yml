@@ -190,6 +190,7 @@ jobs:
       - name: Create GUIDELINES_DIR with content
         run: | 
           mkdir -p dist/guidelines/web
+          mkdir -p dist/guidelines/pdf
           touch dist/guidelines/web/hello_web.txt
           touch dist/guidelines/pdf/MEI_Guidelines_v5.pdf
 
