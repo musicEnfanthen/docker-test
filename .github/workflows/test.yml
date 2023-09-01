@@ -203,7 +203,7 @@ jobs:
 
       - name: Copy built PDF guidelines to GUIDELINES_DIR, if release is being created
         if: github.repository_owner == env.REPO_OWNER && startsWith(github.ref, 'refs/tags/v')
-        run: find ${{ github.workspace }}/dist/guidelines/pdf -name 'MEI_Guidelines_*.pdf' -exec cp {} $GUIDELINES_DIR/$TARGET_DIR/ \;
+        run: find ${{ github.workspace }}/dist/guidelines/pdf -name 'MEI_Guidelines_${{ github.ref_name }}.pdf' -exec cp {} $GUIDELINES_DIR/$TARGET_DIR/ \;
 
       - name: Check git status before commit
         if: github.repository_owner == env.REPO_OWNER
