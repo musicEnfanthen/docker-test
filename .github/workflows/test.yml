@@ -18,7 +18,7 @@ on:
       - "v*"
 
 env:
-  REPO_OWNER: music-encoding
+  REPO_OWNER: musicEnfanthen
 
   # schema
   SCHEMA_REPO: ${{ github.repository_owner }}/schema
