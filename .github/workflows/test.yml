@@ -89,13 +89,20 @@ jobs:
 
       ### SET TARGET_DIR environment variable for dev version
       - name: Set TARGET_DIR for dev
-        if: ${{github.repository_owner}} == env.REPO_OWNER && ${{github.ref}} == 'refs/heads/develop'
+        if: github.repository_owner == env.REPO_OWNER && github.ref == 'refs/heads/develop'
         run: echo "TARGET_DIR=dev" >> $GITHUB_ENV
 
       ### SET TARGET_DIR environment variable for tagged release
       - name: Set TARGET_DIR for tagged release
-        if: ${{github.repository_owner}} == env.REPO_OWNER  && startsWith(github.ref, 'refs/tags/v')
+        if: github.repository_owner == env.REPO_OWNER  && startsWith(github.ref, 'refs/tags/')
         run: echo "TARGET_DIR=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Get tag version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Check tag version
+        run: echo "VERSION=${{ steps.get_version.outputs.VERSION }}"
 
       ### CHECK TARGET NAME
       - name: Check TARGET_DIR
