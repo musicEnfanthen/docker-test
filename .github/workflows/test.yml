@@ -88,7 +88,7 @@ jobs:
 
       ### SET TARGET_DIR environment variable for dev version
       - name: Set TARGET_DIR for dev
-        if: ${{ (github.repository_owner == env.REPO_OWNER) && (github.ref == 'refs/heads/develop') }}
+        if: ${{github.repository_owner}} == env.REPO_OWNER && ${{github.ref}} == 'refs/heads/develop'
         run: echo "TARGET_DIR=dev" >> $GITHUB_ENV
 
       ### SET TARGET_DIR environment variable for tagged release
