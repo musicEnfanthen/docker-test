@@ -228,10 +228,10 @@ jobs:
           git add .
           git commit -m "Auto-commit of guidelines build for ${{ github.repository }}@${{ github.sha }}"
 
-      - name: Push changes to GUIDELINES
-        if: github.repository_owner == env.REPO_OWNER
-        working-directory: ${{ env.GUIDELINES_DIR }}
-        run: git push origin HEAD:$GUIDELINES_BRANCH
+      # - name: Push changes to GUIDELINES
+      #   if: github.repository_owner == env.REPO_OWNER
+      #   working-directory: ${{ env.GUIDELINES_DIR }}
+      #   run: git push origin HEAD:$GUIDELINES_BRANCH
 
       # Whenever a tag is being created a released is being issued
       # could be remodelled to automaticall create the tag, too
