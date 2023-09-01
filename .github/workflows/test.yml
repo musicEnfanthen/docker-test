@@ -53,11 +53,6 @@ jobs:
           echo "github.event_name: ${{ github.event_name }}"
           echo "github.event.base_ref: ${{ github.event.base_ref }}"
 
-      ### Exit if refis not on develop or tag
-      - name: Exit if not on develop or tag
-        if: github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/tags/v')
-        run: exit -1
-
       ### BUIDLING THE SCHEMA AND THE GUIDELINES ###
       - name: Checkout main repo
         uses: actions/checkout@v3
@@ -87,6 +82,7 @@ jobs:
           name: prince_log
           path: ${{ github.workspace }}/build/prince.log
 
+
       ### SET TARGET_DIR environment variable for dev version
       - name: Set TARGET_DIR for dev
         if: github.repository_owner == env.REPO_OWNER && github.ref == 'refs/heads/develop'
@@ -97,6 +93,10 @@ jobs:
         if: github.repository_owner == env.REPO_OWNER  && startsWith(github.ref, 'refs/tags/')
         run: echo "TARGET_DIR=${{ github.ref_name }}" >> $GITHUB_ENV
 
+      ### CHECK TARGET NAME
+      - name: Check TARGET_DIR
+        run: echo "TARGET_DIR=${{ env.TARGET_DIR }}"
+
       - name: Get tag version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
@@ -104,9 +104,10 @@ jobs:
       - name: Check tag version
         run: echo "VERSION=${{ steps.get_version.outputs.VERSION }}"
 
-      ### CHECK TARGET NAME
-      - name: Check TARGET_DIR
-        run: echo "TARGET_DIR=${{ env.TARGET_DIR }}"
+      ### Exit if ref is not on develop or tag
+      - name: Exit if not on develop or tag
+        if: github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/tags/v')
+        run: exit -1
 
       ### PUBLISHING THE SCHEMA ###
       - name: Checkout SCHEMA_REPO into SCHEMA_DIR
