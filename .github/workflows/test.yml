@@ -94,7 +94,7 @@ jobs:
 
       ### CHECK TARGET NAME
       - name: Check TARGET_DIR
-        run: echo "TARGET_DIR=${{ env.TARGET_DIR }}"
+        run: echo "TARGET_DIR=$TARGET_DIR"
 
       - name: Get tag version
         id: get_version
@@ -125,12 +125,12 @@ jobs:
 
 
       - name: Check SCHEMA_DIR
-        run: echo "SCHEMA_DIR=${{ env.SCHEMA_DIR }}/${{env.TARGET_DIR}}"
+        run: echo "SCHEMA_DIR=$SCHEMA_DIR/$TARGET_DIR"
 
       - name: Copy built schema to SCHEMA_DIR
         if: github.repository_owner == env.REPO_OWNER
         run: |
-          rm -r $SCHEMA_DIR/${{ env.TARGET_DIR }}
+          if [-d "$SCHEMA_DIR/$TARGET_DIR"]; then rm -rf $SCHEMA_DIR/$TARGET_DIR; fi
           cp -r dist/schemata/ $SCHEMA_DIR/
           mv $SCHEMA_DIR/schemata $SCHEMA_DIR/${{ env.TARGET_DIR }}
           cp -r build/mei-source_canonicalized.xml $SCHEMA_DIR/${{ env.TARGET_DIR }}
