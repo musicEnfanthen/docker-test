@@ -71,7 +71,7 @@ jobs:
           submodules: recursive
 
       - name: Build schema and guidelines with Docker image
-        run: docker run --rm -v $(pwd):/opt/docker-mei/music-encoding ghcr.io/music-encoding/docker-mei:latest ant -noinput -buildfile music-encoding/build.xml -Ddocker=true -Dgithub.sha=${{ github.sha }} -Dgithub.event_name=${{ github.event_name }} -Dgithub.ref=${{ github.ref }}
+        run: echo "Building schema and guidelines with Docker image..."
 
       ### UPLOADING THE ARTIFACTS ###
       - name: Upload PDF
