@@ -82,6 +82,16 @@ jobs:
           name: prince_log
           path: ${{ github.workspace }}/build/prince.log
 
+      ### Exit if not running on develop or tag
+      - name: Exit if not on develop or tag
+        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/v')
+        run: echo "IS_DEV_OR_TAG=true" >> $GITHUB_ENV
+
+            
+      ### CHECK IS_DEV_OR_TAG VARIABLE
+      - name: Check IS_DEV_OR_TAG
+        run: echo "IS_DEV_OR_TAG=$IS_DEV_OR_TAG"
+
       ### SET TARGET_DIR environment variable for dev version
       - name: Set TARGET_DIR for dev
         if: github.repository_owner == env.REPO_OWNER && github.ref == 'refs/heads/develop'
@@ -95,15 +105,6 @@ jobs:
       ### CHECK TARGET NAME
       - name: Check TARGET_DIR
         run: echo "TARGET_DIR=$TARGET_DIR"
-
-      ### Exit if not running on develop or tag
-      - name: Exit if not on develop or tag
-        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/v')
-        run: echo "IS_DEV_OR_TAG=true" >> $GITHUB_ENV
-
-      ### CHECK IS_DEV_OR_TAG VARIABLE
-      - name: Check IS_DEV_OR_TAG
-        run: echo "IS_DEV_OR_TAG=$IS_DEV_OR_TAG"
 
       ### PUBLISHING THE SCHEMA ###
       - name: Checkout SCHEMA_REPO into SCHEMA_DIR
