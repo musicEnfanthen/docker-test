@@ -99,7 +99,11 @@ jobs:
       ### Exit if ref is not on develop or tag
       - name: Exit if not on develop or tag
         if: github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/tags/v')
-        run: exit -1
+        run: echo "IS_DEV_OR_TAG=true" >> $GITHUB_ENV
+
+      ### CHECK TARGET NAME
+      - name: Check TARGET_DIR
+        run: echo "IS_DEV_OR_TAG=$IS_DEV_OR_TAG"
 
       ### PUBLISHING THE SCHEMA ###
       - name: Checkout SCHEMA_REPO into SCHEMA_DIR
