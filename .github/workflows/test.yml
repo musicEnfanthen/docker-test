@@ -143,8 +143,8 @@ jobs:
       - name: Zip files
         if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
         run: |
-          zip -r -X -j dist/MEI_Schemata_5.0.zip dist/schemata
-          ls -l dist/MEI_Schemata_5.0.zip
+          zip -r -X -j dist/MEI_Schemata_${{ github.ref_name }}.zip dist/schemata
+          ls -l dist/MEI_Schemata_${{ github.ref_name }}.zip
 
       - name: Copy built schema to SCHEMA_DIR
         if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
@@ -275,7 +275,7 @@ jobs:
         with:
           allowUpdates: true
           omitDraftDuringUpdate: true
-          artifacts: "${{ github.workspace }}/dist/MEI_Schemata_5.0.zip"
+          artifacts: "${{ github.workspace }}/dist/MEI_Schemata_${{ github.ref_name }}.zip"
           artifactErrorsFailBuild: true
           commit: ${{ github.sha }}
           draft: true
