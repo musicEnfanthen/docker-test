@@ -141,8 +141,8 @@ jobs:
       - name: Zip files
         if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
         run: |
-          zip -r -X .j dist/MEI_Schemata_5.0.zip dist/schemata
-          ls -l dist/EI_Schemata_5.0.zip
+          zip -r -X -j dist/MEI_Schemata_5.0.zip dist/schemata
+          ls -l dist/MEI_Schemata_5.0.zip
 
       - name: Copy built schema to SCHEMA_DIR
         if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
