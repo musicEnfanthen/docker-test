@@ -188,7 +188,7 @@ jobs:
           # relative path under $GITHUB_WORKSPACE to place the repository
           path: ${{ env.GUIDELINES_DIR }}
     
-      - name: Create TARGET_DIR for guidelines on release
+      - name: Create correct TARGET_DIR for guidelines on release
         if: github.repository_owner == env.REPO_OWNER && startsWith(github.ref, 'refs/tags/v')
         run: |
           echo ${TARGET_DIR:0:2}
