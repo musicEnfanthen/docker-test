@@ -121,6 +121,17 @@ jobs:
           # relative path under $GITHUB_WORKSPACE to place the repository
           path: ${{ env.SCHEMA_DIR }}
 
+      - name: Create TARGET_DIR for schema
+        if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
+        run: |
+          echo ${TARGET_DIR:1:3}
+          echo "TEST_DIR=${TARGET_DIR:1:3}" >> $GITHUB_ENV
+      
+      - name: Validate TARGET_DIR for schema
+        if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
+        run: |
+          echo "TEST_DIR=$TEST_DIR"
+
 
       - name: Check SCHEMA_DIR
         if: github.repository_owner == env.REPO_OWNER && env.IS_DEV_OR_TAG == 'true'
